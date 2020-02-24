@@ -1,0 +1,36 @@
+{
+  "name": "lambdata",
+  "version": "1.0.0",
+  "description": "Purely functional data structures in Typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pure",
+    "functional",
+    "data",
+    "structures",
+    "typescript",
+    "fp",
+    "programming",
+    "okasaki"
+  ],
+  "author": "Jonathan Skeate",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/prettier": "1.19.0",
+    "@yarnpkg/pnpify": "^2.0.0-rc.18",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "fp-ts": "^2.5.1"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always"
+  }
+}
