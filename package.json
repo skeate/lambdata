@@ -21,6 +21,9 @@
   "devDependencies": {
     "@types/prettier": "1.19.0",
     "@yarnpkg/pnpify": "^2.0.0-rc.18",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "3.1.0",
+    "husky": "^4.2.3",
     "prettier": "^1.19.1",
     "typescript": "^3.7.5"
   },
@@ -32,5 +35,15 @@
     "singleQuote": true,
     "trailingComma": "all",
     "arrowParens": "always"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+    }
   }
 }
