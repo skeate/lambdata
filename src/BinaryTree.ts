@@ -4,7 +4,6 @@ import { Traversable1 } from 'fp-ts/lib/Traversable'
 import { Applicative } from 'fp-ts/lib/Applicative'
 import { identity } from 'fp-ts/lib/function'
 import { HKT } from 'fp-ts/lib/HKT'
-import { array } from 'fp-ts/lib/Array'
 
 import { PSet } from './PSet'
 
