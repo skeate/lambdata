@@ -4,7 +4,7 @@
   "description": "Purely functional data structures in Typescript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "pure",
@@ -19,12 +19,17 @@
   "author": "Jonathan Skeate",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^25.1.3",
     "@types/prettier": "1.19.0",
     "@yarnpkg/pnpify": "^2.0.0-rc.18",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "3.1.0",
+    "fast-check": "^1.22.2",
+    "fp-ts-laws": "^0.2.1",
     "husky": "^4.2.3",
+    "jest": "^25.1.0",
     "prettier": "^1.19.1",
+    "ts-jest": "^25.2.1",
     "typescript": "^3.7.5"
   },
   "dependencies": {
@@ -45,5 +50,10 @@
     "hooks": {
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "collectCoverage": true
   }
 }
