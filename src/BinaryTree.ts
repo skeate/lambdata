@@ -1,3 +1,4 @@
+import { Eq, fromEquals } from 'fp-ts/lib/Eq'
 import { Ord } from 'fp-ts/lib/Ord'
 import { Functor1 } from 'fp-ts/lib/Functor'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
@@ -150,3 +151,18 @@ export const getSet = <A>(ord: Ord<A>): PSet<URI, A> => ({
   insert: insert(ord),
   member: member(ord),
 })
+
+export const getEq = <A>(eqa: Eq<A>): Eq<BinaryTree<A>> => {
+  const S: Eq<BinaryTree<A>> = fromEquals((x, y) => {
+    if (x.type === 'Leaf' && y.type === 'Leaf') return true
+    if (x.type === 'Node' && y.type === 'Node') {
+      return (
+        x.value === y.value &&
+        S.equals(x.left, y.left) &&
+        S.equals(x.right, y.right)
+      )
+    }
+    return false
+  })
+  return S
+}
