@@ -68,6 +68,9 @@ export const insert = <A>(xs: List<A>, i: number, y: A): List<A> =>
     ? cons(y, xs)
     : cons(xs.value, insert(xs.next, i - 1, y))
 
+export const reverse = <A>(xs: List<A>, reversed: List<A> = nil): List<A> =>
+  xs.type === 'Nil' ? reversed : reverse(xs.next, cons(xs.value, reversed))
+
 export const list: Functor1<URI> & Monad1<URI> = {
   URI,
 

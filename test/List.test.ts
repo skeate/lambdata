@@ -122,6 +122,16 @@ describe('List', () => {
     })
   })
 
+  describe('reverse', () => {
+    it('reverses lists with minimal construction', () => {
+      const before = L.arr2list([1, 2, 3, 4])
+      const after = L.arr2list([4, 3, 2, 1])
+      const cons = jest.spyOn(L, 'cons')
+      expect(L.reverse(before)).toEqual(after)
+      expect(cons).toHaveBeenCalledTimes(4)
+    })
+  })
+
   describe('eq', () => {
     it('checks equality of two lists', () => {
       expect(L.getEq(eqNumber).equals({ type: 'Nil', length: 0 }, L.nil)).toBe(
