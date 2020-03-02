@@ -26,7 +26,7 @@ export type LeftistHeap<A> =
 export { leaf }
 
 export const node = <A>({
-  rank = 0,
+  rank = 1,
   left = leaf,
   value,
   right = leaf,
@@ -75,7 +75,7 @@ export const leftistHeap: PHeap<URI> = {
   isEmpty: () => ({ type }) => type === 'Leaf',
 
   merge,
-  insert: (ord) => (a, heap) => merge(ord)(node({ rank: 1, value: a }), heap),
+  insert: (ord) => (a, heap) => merge(ord)(node({ value: a }), heap),
 
   findMin: () => (heap) => (heap.type === 'Leaf' ? none : some(heap.value)),
   deleteMin: (ord) => (heap) =>
