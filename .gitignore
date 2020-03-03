@@ -5,3 +5,4 @@ node_modules
 .pnp.*
 coverage
 report.*.json
+dist

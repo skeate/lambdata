@@ -4,6 +4,7 @@
   "description": "Purely functional data structures in Typescript",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "test": "jest"
   },
   "keywords": [
@@ -57,8 +58,6 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "collectCoverage": true,
-    "collectCoverageFrom": [
-      "./src/**/*.ts"
-    ]
+    "collectCoverageFrom": ["./src/**/*.ts"]
   }
 }
