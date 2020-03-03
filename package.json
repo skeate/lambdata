@@ -43,7 +43,9 @@
   },
   "config": {
     "commitizen": {
-      "path": "cz-conventional-changelog"
+      "path": "cz-conventional-changelog",
+      "maxHeaderWidth": 60,
+      "maxLineWidth": 72
     }
   },
   "husky": {
