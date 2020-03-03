@@ -73,7 +73,8 @@
     "testEnvironment": "node",
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "./src/**/*.ts"
+      "./src/**/*.ts",
+      "!./src/index.ts"
     ]
   }
 }

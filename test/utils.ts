@@ -1,7 +1,8 @@
 import * as fc from 'fast-check'
 import * as laws from 'fp-ts-laws'
-import { Eq } from 'fp-ts/lib/Eq'
 import { array } from 'fp-ts/lib/Array'
+import { Eq } from 'fp-ts/lib/Eq'
+import { Foldable, Foldable1 } from 'fp-ts/lib/Foldable'
 import { HKT, Kind, URIS } from 'fp-ts/lib/HKT'
 import { monoidSum } from 'fp-ts/lib/Monoid'
 import { isSome, some, none } from 'fp-ts/lib/Option'
@@ -174,37 +175,7 @@ export function itObeysTraversable<T>(
         laws.functor(t)(lift, liftEq)
       })
 
-      describe('implements foldable', () => {
-        it('implements reduce', () => {
-          fc.assert(
-            fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
-              expect(t.reduce(convertT(xs), 0, (b, a) => b + a)).toEqual(
-                xs.reduce((p, n) => p + n, 0),
-              )
-            }),
-          )
-        })
-
-        it('implements reduceRight', () => {
-          fc.assert(
-            fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
-              expect(t.reduceRight(convertT(xs), 0, (b, a) => b + a)).toEqual(
-                xs.reduceRight((p, n) => p + n, 0),
-              )
-            }),
-          )
-        })
-
-        it('implements foldMap', () => {
-          fc.assert(
-            fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
-              expect(t.foldMap(monoidSum)(convertT(xs), (a) => a)).toEqual(
-                xs.reduce((s, n) => s + n, 0),
-              )
-            }),
-          )
-        })
-      })
+      itObeysFoldable(t)(convertT)
 
       describe('implements traversable', () => {
         it('implements sequence', () => {
@@ -226,6 +197,50 @@ export function itObeysTraversable<T>(
             }),
           )
         })
+      })
+    })
+  }
+}
+
+export function itObeysFoldable<F extends URIS>(
+  f: Foldable1<F>,
+): (convertT: (a: number[]) => Kind<F, number>) => void
+export function itObeysFoldable<F>(
+  f: Foldable<F>,
+): (convertT: (a: number[]) => HKT<F, number>) => void
+export function itObeysFoldable<F>(
+  f: Foldable<F>,
+): (convertT: (a: number[]) => HKT<F, number>) => void {
+  return (convertT) => {
+    describe('implements foldable', () => {
+      it('implements reduce', () => {
+        fc.assert(
+          fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
+            expect(f.reduce(convertT(xs), 0, (b, a) => b + a)).toEqual(
+              xs.reduce((p, n) => p + n, 0),
+            )
+          }),
+        )
+      })
+
+      it('implements reduceRight', () => {
+        fc.assert(
+          fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
+            expect(f.reduceRight(convertT(xs), 0, (b, a) => b + a)).toEqual(
+              xs.reduceRight((p, n) => p + n, 0),
+            )
+          }),
+        )
+      })
+
+      it('implements foldMap', () => {
+        fc.assert(
+          fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
+            expect(f.foldMap(monoidSum)(convertT(xs), (a) => a)).toEqual(
+              xs.reduce((s, n) => s + n, 0),
+            )
+          }),
+        )
       })
     })
   }
