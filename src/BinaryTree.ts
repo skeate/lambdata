@@ -157,7 +157,7 @@ export const getEq = <A>(eqa: Eq<A>): Eq<BinaryTree<A>> => {
     if (x.type === 'Leaf' && y.type === 'Leaf') return true
     if (x.type === 'Node' && y.type === 'Node') {
       return (
-        x.value === y.value &&
+        eqa.equals(x.value, y.value) &&
         S.equals(x.left, y.left) &&
         S.equals(x.right, y.right)
       )

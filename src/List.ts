@@ -2,7 +2,7 @@ import { Eq, fromEquals } from 'fp-ts/lib/Eq'
 import { Functor1 } from 'fp-ts/lib/Functor'
 import { Monad1 } from 'fp-ts/lib/Monad'
 import { Monoid } from 'fp-ts/lib/Monoid'
-import { Option, isNone, none, some, option } from 'fp-ts/lib/Option'
+import { Option, none, some, option } from 'fp-ts/lib/Option'
 
 export const URI = 'List'
 export type URI = typeof URI

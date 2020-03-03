@@ -3,7 +3,7 @@ import * as laws from 'fp-ts-laws'
 import { Eq } from 'fp-ts/lib/Eq'
 import { array } from 'fp-ts/lib/Array'
 import { HKT, Kind, URIS } from 'fp-ts/lib/HKT'
-import { Monoid, monoidSum } from 'fp-ts/lib/Monoid'
+import { monoidSum } from 'fp-ts/lib/Monoid'
 import { isSome, some, none } from 'fp-ts/lib/Option'
 import { Traversable, Traversable1 } from 'fp-ts/lib/Traversable'
 import { ordNumber } from 'fp-ts/lib/Ord'
@@ -230,70 +230,3 @@ export function itObeysTraversable<T>(
     })
   }
 }
-/*
-        type Model = number[]
-        type Tn = { t: HKT<T, number> }
-        type Command = fc.Command<Model, Tn>
-
-        class ReduceCmd<B> implements Command {
-          constructor(readonly b: B, readonly f: (b: B, a: number) => B) {}
-          check = () => true
-          run(m: Model, r: Tn) {
-            expect(t.reduce(r.t, this.b, this.f)).toEqual(
-              m.reduce(this.f, this.b),
-            )
-          }
-          toString = () => `reduce(${this.b}, ${this.f})`
-        }
-        class ReduceRightCmd<B> implements Command {
-          constructor(readonly b: B, readonly f: (a: number, b: B) => B) {}
-          check = () => true
-          run(m: Model, r: Tn) {
-            expect(t.reduceRight(r.t, this.b, this.f)).toEqual(
-              m.reduceRight((a, b) => this.f(b, a), this.b),
-            )
-          }
-          toString = () => `reduceRight(${this.b}, ${this.f})`
-        }
-        class FoldMapCmd implements Command {
-          constructor(
-            readonly m: Monoid<number>,
-            readonly f: (a: number) => number,
-          ) {}
-          check = () => true
-          run(m: Model, r: Tn) {
-            expect(t.foldMap(this.m)(r.t, this.f)).toEqual(
-              m.reduce((p, n) => this.m.concat(p, n), this.m.empty),
-            )
-          }
-          toString = () => `foldMap(${this.m})(${this.f})`
-        }
-        const allCommands = [
-          fc.integer().map((v) => new ReduceCmd(v, (b, a) => b * a)),
-          fc.integer().map((v) => new ReduceCmd(v, (b, a) => b + a)),
-          fc.integer().map((v) => new ReduceCmd(v, (b, a) => b ^ a)),
-          fc.integer().map((v) => new ReduceRightCmd(v, (b, a) => b * a)),
-          fc.integer().map((v) => new ReduceRightCmd(v, (b, a) => b + a)),
-          fc.integer().map((v) => new ReduceRightCmd(v, (b, a) => b ^ a)),
-          fc.constant(new IsEmptyCmd()),
-          fc.constant(new FindMinCmd()),
-          fc.constant(new DeleteMinCmd()),
-          fc.array(fc.integer()).map(
-            (xs) =>
-              new MergeCmd(xs, {
-                h: xs.reduce((h, x) => insert(x, h), empty),
-              }),
-          ),
-        ]
-
-        fc.assert(
-          fc.property(fc.commands(allCommands, 100), (cmds) => {
-            const s = () => ({ model: [], real: { h: empty } })
-            fc.modelRun(s, cmds)
-          }),
-        )
-      })
-    })
-  }
-}
-*/

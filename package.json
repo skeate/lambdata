@@ -4,7 +4,9 @@
   "description": "Purely functional data structures in Typescript",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf dist types",
+    "prebuild": "yarn clean",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.es6.json",
     "test": "jest"
   },
   "keywords": [

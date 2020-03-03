@@ -1,8 +1,9 @@
 node_modules
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
 .pnp.*
 coverage
 report.*.json
 dist
+types
