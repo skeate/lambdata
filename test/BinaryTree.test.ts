@@ -1,7 +1,9 @@
 import * as fc from 'fast-check'
-import { ordNumber } from 'fp-ts/lib/Ord'
+import { eqNumber } from 'fp-ts/lib/Eq'
+import { ordNumber, ordString } from 'fp-ts/lib/Ord'
 import * as laws from 'fp-ts-laws'
 import * as BT from '../src/BinaryTree'
+import { itObeysPSet, itObeysTraversable } from './utils'
 
 const lift = <A>(arb: fc.Arbitrary<A>): fc.Arbitrary<BT.BinaryTree<A>> =>
   fc.oneof(
@@ -12,48 +14,32 @@ const lift = <A>(arb: fc.Arbitrary<A>): fc.Arbitrary<BT.BinaryTree<A>> =>
 describe('BinaryTree', () => {
   it('obeys laws', () => {
     laws.functor(BT.binaryTree)(lift, BT.getEq)
+    laws.eq(
+      BT.getEq(eqNumber),
+      fc
+        .array(fc.integer())
+        .map((xs) =>
+          xs.reduce(
+            (t, x) => BT.insert(ordNumber)(x, t),
+            BT.leaf as BT.BinaryTree<number>,
+          ),
+        ),
+    )
+    expect(BT.getEq(eqNumber).equals({ type: 'Leaf' }, { type: 'Leaf' })).toBe(
+      true,
+    )
   })
 
-  describe('member', () => {
-    it('checks membership in empty trees', () => {
-      expect(BT.member(ordNumber)(3, BT.leaf)).toBe(false)
-    })
+  itObeysPSet('integers', BT.getSet(ordNumber), () => fc.integer())
+  itObeysPSet('hexadecimal strings', BT.getSet(ordString), () => fc.hexa())
 
-    it('checks membership in populated trees', () => {
-      const tree = BT.node({
-        left: BT.node({ value: 1 }),
-        value: 2,
-        right: BT.leaf,
-      })
-      expect(BT.member(ordNumber)(3, tree)).toBe(false)
-      expect(BT.member(ordNumber)(2, tree)).toBe(true)
-      expect(BT.member(ordNumber)(1, tree)).toBe(true)
-      expect(BT.member(ordNumber)(0, tree)).toBe(false)
-    })
-  })
-
-  describe('insert', () => {
-    const insert = BT.insert(ordNumber)
-
-    it('inserts values into a tree', () => {
-      const ins1 = insert(1, BT.leaf)
-      expect(ins1).toEqual(BT.node({ value: 1 }))
-      const ins2 = insert(2, ins1)
-      expect(ins2).toEqual(BT.node({ value: 1, right: BT.node({ value: 2 }) }))
-      const ins0 = insert(0, ins2)
-      expect(ins0).toEqual(
-        BT.node({
-          left: BT.node({ value: 0 }),
-          value: 1,
-          right: BT.node({ value: 2 }),
-        }),
-      )
-    })
-
-    it(`doesn't insert existing values into the tree`, () => {
-      const ins1 = insert(1, BT.leaf)
-      const ins1Twice = insert(1, ins1)
-      expect(ins1Twice).toEqual(ins1)
-    })
-  })
+  itObeysTraversable(BT.binaryTree)(
+    (v) => v.map((value) => BT.node({ value })),
+    (xs) =>
+      xs.reduce(
+        (t, x) => BT.insert(ordNumber)(x, t),
+        BT.leaf as BT.BinaryTree<number>,
+      ),
+    BT.getEq,
+  )
 })

@@ -1,10 +1,57 @@
 import * as fc from 'fast-check'
-import { Kind, URIS } from 'fp-ts/lib/HKT'
+import * as laws from 'fp-ts-laws'
+import { Eq } from 'fp-ts/lib/Eq'
+import { array } from 'fp-ts/lib/Array'
+import { HKT, Kind, URIS } from 'fp-ts/lib/HKT'
+import { Monoid, monoidSum } from 'fp-ts/lib/Monoid'
 import { isSome, some, none } from 'fp-ts/lib/Option'
+import { Traversable, Traversable1 } from 'fp-ts/lib/Traversable'
 import { ordNumber } from 'fp-ts/lib/Ord'
 import { PHeap } from '../src/PHeap'
+import { PSet } from '../src/PSet'
 
-type Model = number[]
+export function itObeysPSet<S extends URIS, A>(
+  name: string,
+  pset: PSet<S, A>,
+  arb: () => fc.Arbitrary<A>,
+): void {
+  type Model = Set<A>
+  type Sn = { s: Kind<S, A> }
+  type Command = fc.Command<Model, Sn>
+
+  class InsertCmd implements Command {
+    constructor(readonly value: A) {}
+    check = () => true
+    run(m: Model, r: Sn) {
+      r.s = pset.insert(this.value, r.s)
+      m.add(this.value)
+    }
+    toString = () => `insert(${this.value})`
+  }
+
+  class MemberCmd implements Command {
+    constructor(readonly value: A) {}
+    check = () => true
+    run(m: Model, r: Sn) {
+      expect(pset.member(this.value, r.s)).toEqual(m.has(this.value))
+    }
+    toString = () => `member(${this.value})`
+  }
+
+  it(`obeys PSet (data: ${name})`, () => {
+    const allCommands = [
+      arb().map((v) => new InsertCmd(v)),
+      arb().map((v) => new MemberCmd(v)),
+    ]
+
+    fc.assert(
+      fc.property(fc.commands(allCommands, 100), (cmds) => {
+        const s = () => ({ model: new Set<A>(), real: { s: pset.empty } })
+        fc.modelRun(s, cmds)
+      }),
+    )
+  })
+}
 
 export function itObeysPHeap<H extends URIS>(pheap: PHeap<H>): void {
   const isEmpty = pheap.isEmpty(ordNumber)
@@ -14,6 +61,7 @@ export function itObeysPHeap<H extends URIS>(pheap: PHeap<H>): void {
   const findMin = pheap.findMin(ordNumber)
   const deleteMin = pheap.deleteMin(ordNumber)
 
+  type Model = number[]
   type Hn = { h: Kind<H, number> }
   type Command = fc.Command<Model, Hn>
 
@@ -98,3 +146,154 @@ export function itObeysPHeap<H extends URIS>(pheap: PHeap<H>): void {
     )
   })
 }
+
+export function itObeysTraversable<T extends URIS>(
+  t: Traversable1<T>,
+): (
+  lift: <A>(a: fc.Arbitrary<A>) => fc.Arbitrary<Kind<T, A>>,
+  convertT: (a: number[]) => Kind<T, number>,
+  liftEq: <A>(Sa: Eq<A>) => Eq<Kind<T, A>>,
+) => void
+export function itObeysTraversable<T>(
+  t: Traversable<T>,
+): (
+  lift: <A>(a: fc.Arbitrary<A>) => fc.Arbitrary<HKT<T, A>>,
+  convertT: (a: number[]) => HKT<T, number>,
+  liftEq: <A>(Sa: Eq<A>) => Eq<HKT<T, A>>,
+) => void
+export function itObeysTraversable<T>(
+  t: Traversable<T>,
+): (
+  lift: <A>(a: fc.Arbitrary<A>) => fc.Arbitrary<HKT<T, A>>,
+  convertT: <A>(a: A[]) => HKT<T, A>,
+  liftEq: <A>(Sa: Eq<A>) => Eq<HKT<T, A>>,
+) => void {
+  return (lift, convertT, liftEq) => {
+    describe('obeys traversable', () => {
+      it('obeys functor', () => {
+        laws.functor(t)(lift, liftEq)
+      })
+
+      describe('implements foldable', () => {
+        it('implements reduce', () => {
+          fc.assert(
+            fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
+              expect(t.reduce(convertT(xs), 0, (b, a) => b + a)).toEqual(
+                xs.reduce((p, n) => p + n, 0),
+              )
+            }),
+          )
+        })
+
+        it('implements reduceRight', () => {
+          fc.assert(
+            fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
+              expect(t.reduceRight(convertT(xs), 0, (b, a) => b + a)).toEqual(
+                xs.reduceRight((p, n) => p + n, 0),
+              )
+            }),
+          )
+        })
+
+        it('implements foldMap', () => {
+          fc.assert(
+            fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
+              expect(t.foldMap(monoidSum)(convertT(xs), (a) => a)).toEqual(
+                xs.reduce((s, n) => s + n, 0),
+              )
+            }),
+          )
+        })
+      })
+
+      describe('implements traversable', () => {
+        it('implements sequence', () => {
+          fc.assert(
+            fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
+              expect(
+                t.sequence(array)(t.map(convertT(xs), (x) => [x])),
+              ).toEqual([convertT(xs)])
+            }),
+          )
+        })
+
+        it('implements traverse', () => {
+          fc.assert(
+            fc.property(fc.set(fc.integer(-1000, 1000)), (xs) => {
+              expect(t.traverse(array)(convertT(xs), (x) => [x])).toEqual([
+                convertT(xs),
+              ])
+            }),
+          )
+        })
+      })
+    })
+  }
+}
+/*
+        type Model = number[]
+        type Tn = { t: HKT<T, number> }
+        type Command = fc.Command<Model, Tn>
+
+        class ReduceCmd<B> implements Command {
+          constructor(readonly b: B, readonly f: (b: B, a: number) => B) {}
+          check = () => true
+          run(m: Model, r: Tn) {
+            expect(t.reduce(r.t, this.b, this.f)).toEqual(
+              m.reduce(this.f, this.b),
+            )
+          }
+          toString = () => `reduce(${this.b}, ${this.f})`
+        }
+        class ReduceRightCmd<B> implements Command {
+          constructor(readonly b: B, readonly f: (a: number, b: B) => B) {}
+          check = () => true
+          run(m: Model, r: Tn) {
+            expect(t.reduceRight(r.t, this.b, this.f)).toEqual(
+              m.reduceRight((a, b) => this.f(b, a), this.b),
+            )
+          }
+          toString = () => `reduceRight(${this.b}, ${this.f})`
+        }
+        class FoldMapCmd implements Command {
+          constructor(
+            readonly m: Monoid<number>,
+            readonly f: (a: number) => number,
+          ) {}
+          check = () => true
+          run(m: Model, r: Tn) {
+            expect(t.foldMap(this.m)(r.t, this.f)).toEqual(
+              m.reduce((p, n) => this.m.concat(p, n), this.m.empty),
+            )
+          }
+          toString = () => `foldMap(${this.m})(${this.f})`
+        }
+        const allCommands = [
+          fc.integer().map((v) => new ReduceCmd(v, (b, a) => b * a)),
+          fc.integer().map((v) => new ReduceCmd(v, (b, a) => b + a)),
+          fc.integer().map((v) => new ReduceCmd(v, (b, a) => b ^ a)),
+          fc.integer().map((v) => new ReduceRightCmd(v, (b, a) => b * a)),
+          fc.integer().map((v) => new ReduceRightCmd(v, (b, a) => b + a)),
+          fc.integer().map((v) => new ReduceRightCmd(v, (b, a) => b ^ a)),
+          fc.constant(new IsEmptyCmd()),
+          fc.constant(new FindMinCmd()),
+          fc.constant(new DeleteMinCmd()),
+          fc.array(fc.integer()).map(
+            (xs) =>
+              new MergeCmd(xs, {
+                h: xs.reduce((h, x) => insert(x, h), empty),
+              }),
+          ),
+        ]
+
+        fc.assert(
+          fc.property(fc.commands(allCommands, 100), (cmds) => {
+            const s = () => ({ model: [], real: { h: empty } })
+            fc.modelRun(s, cmds)
+          }),
+        )
+      })
+    })
+  }
+}
+*/

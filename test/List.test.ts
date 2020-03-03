@@ -16,8 +16,6 @@ const lift = <A>(arb: fc.Arbitrary<A>): fc.Arbitrary<L.List<A>> =>
 
 describe('List', () => {
   it('obeys laws', () => {
-    laws.functor(L.list)(lift, L.getEq)
-    laws.applicative(L.list)(lift, L.getEq)
     laws.monad(L.list)(L.getEq)
     laws.eq(L.getEq(eqNumber), lift(fc.integer()))
     laws.monoid(L.getMonoid<number>(), L.getEq(eqNumber), lift(fc.integer()))
