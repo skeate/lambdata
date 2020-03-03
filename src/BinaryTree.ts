@@ -1,10 +1,6 @@
 import { Eq, fromEquals } from 'fp-ts/lib/Eq'
 import { Ord } from 'fp-ts/lib/Ord'
-import { Functor1 } from 'fp-ts/lib/Functor'
-import { Traversable1 } from 'fp-ts/lib/Traversable'
-import { Applicative } from 'fp-ts/lib/Applicative'
-import { identity } from 'fp-ts/lib/function'
-import { HKT } from 'fp-ts/lib/HKT'
+import { Foldable1 } from 'fp-ts/lib/Foldable'
 
 import { PSet } from './PSet'
 
@@ -47,49 +43,8 @@ export const node = <A>({
   right,
 })
 
-export const member = <A>(ord: Ord<A>) => (
-  x: A,
-  tree: BinaryTree<A>,
-): boolean => {
-  if (tree.type === 'Leaf') return false
-  const { left, value, right } = tree
-  switch (ord.compare(x, value)) {
-    case -1:
-      return member(ord)(x, left)
-    case 1:
-      return member(ord)(x, right)
-    default:
-      return true
-  }
-}
-
-export const insert = <A>(ord: Ord<A>) => (
-  x: A,
-  tree: BinaryTree<A>,
-): BinaryTree<A> => {
-  if (tree.type === 'Leaf') return node({ value: x })
-  const { left, value, right } = tree
-  switch (ord.compare(x, value)) {
-    case -1:
-      return node({ left: insert(ord)(x, left), value, right })
-    case 1:
-      return node({ left, value, right: insert(ord)(x, right) })
-    default:
-      return tree
-  }
-}
-
-export const binaryTree: Functor1<URI> & Traversable1<URI> = {
+export const binaryTree: Foldable1<URI> = {
   URI,
-
-  map: (fa, f) =>
-    fa.type === 'Leaf'
-      ? fa
-      : node({
-          left: binaryTree.map(fa.left, f),
-          value: f(fa.value),
-          right: binaryTree.map(fa.right, f),
-        }),
 
   foldMap: (M) => (fa, f) =>
     fa.type === 'Leaf'
@@ -118,39 +73,39 @@ export const binaryTree: Functor1<URI> & Traversable1<URI> = {
             f,
           ),
         ),
-
-  sequence: <F>(
-    F: Applicative<F>,
-  ): (<A>(ta: BinaryTree<HKT<F, A>>) => HKT<F, BinaryTree<A>>) => {
-    const traverseF = binaryTree.traverse(F)
-    return (ta) => traverseF(ta, identity)
-  },
-
-  traverse: <F>(F: Applicative<F>) => <A, B>(
-    ta: BinaryTree<A>,
-    f: (a: A) => HKT<F, B>,
-  ): HKT<F, BinaryTree<B>> => {
-    if (ta.type === 'Leaf') return F.of(ta)
-    const { left, value, right } = ta
-    return F.ap(
-      F.ap(
-        F.map(
-          binaryTree.traverse(F)(left, f),
-          (left: BinaryTree<B>) => (value: B) => (right: BinaryTree<B>) =>
-            node({ left, value, right }),
-        ),
-        f(value),
-      ),
-      binaryTree.traverse(F)(right, f),
-    )
-  },
 }
 
-export const getSet = <A>(ord: Ord<A>): PSet<URI, A> => ({
-  empty: leaf,
-  insert: insert(ord),
-  member: member(ord),
-})
+export const getSet = <A>(ord: Ord<A>): PSet<URI, A> => {
+  const S: PSet<URI, A> = {
+    empty: leaf,
+    member: (x, tree) => {
+      if (tree.type === 'Leaf') return false
+      const { left, value, right } = tree
+      switch (ord.compare(x, value)) {
+        case -1:
+          return S.member(x, left)
+        case 1:
+          return S.member(x, right)
+        default:
+          return true
+      }
+    },
+
+    insert: (x, tree) => {
+      if (tree.type === 'Leaf') return node({ value: x })
+      const { left, value, right } = tree
+      switch (ord.compare(x, value)) {
+        case -1:
+          return node({ left: S.insert(x, left), value, right })
+        case 1:
+          return node({ left, value, right: S.insert(x, right) })
+        default:
+          return tree
+      }
+    },
+  }
+  return S
+}
 
 export const getEq = <A>(eqa: Eq<A>): Eq<BinaryTree<A>> => {
   const S: Eq<BinaryTree<A>> = fromEquals((x, y) => {

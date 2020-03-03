@@ -1,31 +1,24 @@
 import * as fc from 'fast-check'
-import { eqNumber } from 'fp-ts/lib/Eq'
-import { ordNumber, ordString } from 'fp-ts/lib/Ord'
+import { eqBoolean } from 'fp-ts/lib/Eq'
+import { ordBoolean, ordNumber, ordString } from 'fp-ts/lib/Ord'
 import * as laws from 'fp-ts-laws'
 import * as BT from '../src/BinaryTree'
-import { itObeysPSet, itObeysTraversable } from './utils'
-
-const lift = <A>(arb: fc.Arbitrary<A>): fc.Arbitrary<BT.BinaryTree<A>> =>
-  fc.oneof(
-    arb.map(() => BT.leaf),
-    arb.map((value) => BT.node({ value })),
-  )
+import { itObeysPSet, itObeysFoldable } from './utils'
 
 describe('BinaryTree', () => {
   it('obeys laws', () => {
-    laws.functor(BT.binaryTree)(lift, BT.getEq)
     laws.eq(
-      BT.getEq(eqNumber),
+      BT.getEq(eqBoolean),
       fc
-        .array(fc.integer())
+        .array(fc.boolean())
         .map((xs) =>
           xs.reduce(
-            (t, x) => BT.insert(ordNumber)(x, t),
-            BT.leaf as BT.BinaryTree<number>,
+            (t, x) => BT.getSet(ordBoolean).insert(x, t),
+            BT.leaf as BT.BinaryTree<boolean>,
           ),
         ),
     )
-    expect(BT.getEq(eqNumber).equals({ type: 'Leaf' }, { type: 'Leaf' })).toBe(
+    expect(BT.getEq(eqBoolean).equals({ type: 'Leaf' }, { type: 'Leaf' })).toBe(
       true,
     )
   })
@@ -33,13 +26,10 @@ describe('BinaryTree', () => {
   itObeysPSet('integers', BT.getSet(ordNumber), () => fc.integer())
   itObeysPSet('hexadecimal strings', BT.getSet(ordString), () => fc.hexa())
 
-  itObeysTraversable(BT.binaryTree)(
-    (v) => v.map((value) => BT.node({ value })),
-    (xs) =>
-      xs.reduce(
-        (t, x) => BT.insert(ordNumber)(x, t),
-        BT.leaf as BT.BinaryTree<number>,
-      ),
-    BT.getEq,
+  itObeysFoldable(BT.binaryTree)((xs) =>
+    xs.reduce(
+      (t, x) => BT.getSet(ordNumber).insert(x, t),
+      BT.leaf as BT.BinaryTree<number>,
+    ),
   )
 })
