@@ -28,15 +28,11 @@ export const leaf = {
   type: 'Leaf',
 } as const
 
-export const node = <A>({
-  left = leaf,
-  value,
-  right = leaf,
-}: {
-  left?: BinaryTree<A>
-  value: A
-  right?: BinaryTree<A>
-}): BinaryTree<A> => ({
+export const node = <A>(
+  left: BinaryTree<A>,
+  value: A,
+  right: BinaryTree<A>,
+): BinaryTree<A> => ({
   type: 'Node',
   left,
   value,
@@ -92,13 +88,13 @@ export const getSet = <A>(ord: Ord<A>): PSet<URI, A> => {
     },
 
     insert: (x, tree) => {
-      if (tree.type === 'Leaf') return node({ value: x })
+      if (tree.type === 'Leaf') return node(leaf, x, leaf)
       const { left, value, right } = tree
       switch (ord.compare(x, value)) {
         case -1:
-          return node({ left: S.insert(x, left), value, right })
+          return node(S.insert(x, left), value, right)
         case 1:
-          return node({ left, value, right: S.insert(x, right) })
+          return node(left, value, S.insert(x, right))
         default:
           return tree
       }
