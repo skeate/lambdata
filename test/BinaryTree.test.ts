@@ -6,7 +6,7 @@ import * as BT from '../src/BinaryTree'
 import { itObeysPSet, itObeysFoldable } from './utils'
 
 describe('BinaryTree', () => {
-  it('obeys laws', () => {
+  it('obeys Eq laws', () => {
     laws.eq(
       BT.getEq(eqBoolean),
       fc
@@ -21,6 +21,34 @@ describe('BinaryTree', () => {
     expect(BT.getEq(eqBoolean).equals({ type: 'Leaf' }, { type: 'Leaf' })).toBe(
       true,
     )
+  })
+
+  it('obeys Ord laws', () => {
+    laws.ord(
+      BT.getOrd(ordNumber),
+      fc
+        .array(fc.integer())
+        .map((xs) =>
+          xs.reduce(
+            (t, x) => BT.getSet(ordNumber).insert(x, t),
+            BT.leaf as BT.BinaryTree<number>,
+          ),
+        ),
+    )
+    laws.ord(
+      BT.getOrd(ordBoolean),
+      fc
+        .array(fc.boolean())
+        .map((xs) =>
+          xs.reduce(
+            (t, x) => BT.getSet(ordBoolean).insert(x, t),
+            BT.leaf as BT.BinaryTree<boolean>,
+          ),
+        ),
+    )
+    expect(
+      BT.getOrd(ordBoolean).compare({ type: 'Leaf' }, { type: 'Leaf' }),
+    ).toBe(0)
   })
 
   itObeysPSet('integers', BT.getSet(ordNumber), () => fc.integer())

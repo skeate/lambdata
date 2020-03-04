@@ -1,5 +1,5 @@
 import { Eq, fromEquals } from 'fp-ts/lib/Eq'
-import { Ord } from 'fp-ts/lib/Ord'
+import { Ord, fromCompare } from 'fp-ts/lib/Ord'
 import { Foldable1 } from 'fp-ts/lib/Foldable'
 
 import { PSet } from './PSet'
@@ -114,6 +114,20 @@ export const getEq = <A>(eqa: Eq<A>): Eq<BinaryTree<A>> => {
       )
     }
     return false
+  })
+  return S
+}
+
+export const getOrd = <A>(ord: Ord<A>): Ord<BinaryTree<A>> => {
+  const S: Ord<BinaryTree<A>> = fromCompare((x, y) => {
+    if (x.type === 'Leaf' && y.type === 'Leaf') return 0
+    if (x.type === 'Leaf') return -1
+    if (y.type === 'Leaf') return 1
+    const left = S.compare(x.left, y.left)
+    if (left !== 0) return left
+    const v = ord.compare(x.value, y.value)
+    if (v !== 0) return v
+    return S.compare(x.right, y.right)
   })
   return S
 }
