@@ -60,4 +60,28 @@ describe('BinaryTree', () => {
       BT.leaf as BT.BinaryTree<number>,
     ),
   )
+
+  it('performs minimal comparisons for membership check', () => {
+    const s = BT.getSet(ordNumber)
+    function depth<A>(n: BT.BinaryTree<A>): number {
+      return n.type === 'Leaf' ? 0 : 1 + Math.max(depth(n.left), depth(n.right))
+    }
+
+    fc.assert(
+      fc.property(
+        fc.integer(-60, 60),
+        fc
+          .array(fc.integer(-50, 50), 20, 30)
+          .map((xs) => xs.reduce((bt, x) => s.insert(x, bt), s.empty)),
+        (x, bt) => {
+          const spiedCompare = jest.spyOn(ordNumber, 'compare')
+          s.member(x, bt)
+          expect(spiedCompare.mock.calls.length).toBeLessThan(
+            depth(bt) + 1,
+          )
+          spiedCompare.mockRestore()
+        },
+      ),
+    )
+  })
 })
