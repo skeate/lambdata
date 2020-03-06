@@ -1,10 +1,19 @@
+/**
+ * @since 0.1.0
+ */
 import { Eq, fromEquals } from 'fp-ts/lib/Eq'
 import { Ord, fromCompare } from 'fp-ts/lib/Ord'
 import { Foldable1 } from 'fp-ts/lib/Foldable'
 
 import { PSet } from './PSet'
 
+/**
+ * @since 0.1.0
+ */
 export const URI = 'BinaryTree'
+/**
+ * @since 0.1.0
+ */
 export type URI = typeof URI
 
 declare module 'fp-ts/lib/HKT' {
@@ -13,6 +22,9 @@ declare module 'fp-ts/lib/HKT' {
   }
 }
 
+/**
+ * @since 0.1.0
+ */
 export type BinaryTree<A> =
   | {
       readonly type: 'Leaf'
@@ -24,10 +36,16 @@ export type BinaryTree<A> =
       readonly right: BinaryTree<A>
     }
 
+/**
+ * @since 0.1.0
+ */
 export const leaf = {
   type: 'Leaf',
 } as const
 
+/**
+ * @since 0.1.0
+ */
 export const node = <A>(
   left: BinaryTree<A>,
   value: A,
@@ -39,6 +57,9 @@ export const node = <A>(
   right,
 })
 
+/**
+ * @since 0.1.0
+ */
 export const binaryTree: Foldable1<URI> = {
   URI,
 
@@ -71,6 +92,9 @@ export const binaryTree: Foldable1<URI> = {
         ),
 }
 
+/**
+ * @since 0.1.0
+ */
 export const getSet = <A>(ord: Ord<A>): PSet<URI, A> => {
   const S: PSet<URI, A> = {
     empty: leaf,
@@ -103,6 +127,9 @@ export const getSet = <A>(ord: Ord<A>): PSet<URI, A> => {
   return S
 }
 
+/**
+ * @since 0.1.0
+ */
 export const getEq = <A>(eqa: Eq<A>): Eq<BinaryTree<A>> => {
   const S: Eq<BinaryTree<A>> = fromEquals((x, y) => {
     if (x.type === 'Leaf' && y.type === 'Leaf') return true
@@ -118,6 +145,9 @@ export const getEq = <A>(eqa: Eq<A>): Eq<BinaryTree<A>> => {
   return S
 }
 
+/**
+ * @since 0.1.0
+ */
 export const getOrd = <A>(ord: Ord<A>): Ord<BinaryTree<A>> => {
   const S: Ord<BinaryTree<A>> = fromCompare((x, y) => {
     if (x.type === 'Leaf' && y.type === 'Leaf') return 0

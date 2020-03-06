@@ -1,10 +1,20 @@
+/**
+ * @since 0.1.0
+ */
 import { none, some } from 'fp-ts/lib/Option'
 import { Ord } from 'fp-ts/lib/Ord'
 
 import { leaf } from './BinaryTree'
 import { PHeap } from './PHeap'
 
+/**
+ * @since 0.1.0
+ */
 export const URI = 'LeftistHeap'
+
+/**
+ * @since 0.1.0
+ */
 export type URI = typeof URI
 
 declare module 'fp-ts/lib/HKT' {
@@ -13,6 +23,9 @@ declare module 'fp-ts/lib/HKT' {
   }
 }
 
+/**
+ * @since 0.1.0
+ */
 export type LeftistHeap<A> =
   | { readonly type: 'Leaf' }
   | {
@@ -23,8 +36,16 @@ export type LeftistHeap<A> =
       readonly right: LeftistHeap<A>
     }
 
-export { leaf }
+export {
+  /**
+   * @since 0.1.0
+   */
+  leaf,
+}
 
+/**
+ * @since 0.1.0
+ */
 export const node = <A>({
   rank = 1,
   left = leaf,
@@ -43,9 +64,15 @@ export const node = <A>({
   right,
 })
 
+/**
+ * @since 0.1.0
+ */
 export const rank = <A>(h: LeftistHeap<A>): number =>
   h.type === 'Leaf' ? 0 : h.rank
 
+/**
+ * @since 0.1.0
+ */
 export const makeT = <A>(
   value: A,
   a: LeftistHeap<A>,
@@ -70,6 +97,9 @@ const merge = <A>(ord: Ord<A>) => (
   }
 }
 
+/**
+ * @since 0.1.0
+ */
 export const leftistHeap: PHeap<URI> = {
   empty: () => leaf,
   isEmpty: () => ({ type }) => type === 'Leaf',

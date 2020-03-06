@@ -1,9 +1,19 @@
+/**
+ * @since 0.1.0
+ */
 import { Foldable1 } from 'fp-ts/lib/Foldable'
 import { Ord } from 'fp-ts/lib/Ord'
 import { leaf } from './BinaryTree'
 import { PSet } from './PSet'
 
+/**
+ * @since 0.1.0
+ */
 export const URI = 'RBTree'
+
+/**
+ * @since 0.1.0
+ */
 export type URI = typeof URI
 
 declare module 'fp-ts/lib/HKT' {
@@ -12,7 +22,7 @@ declare module 'fp-ts/lib/HKT' {
   }
 }
 
-export type Color = 'R' | 'B'
+type Color = 'R' | 'B'
 type Node<A> = {
   readonly type: 'Node'
   readonly color: Color
@@ -20,9 +30,22 @@ type Node<A> = {
   readonly value: A
   readonly right: RBTree<A>
 }
-export type RBTree<A> = { readonly type: 'Leaf' } | Node<A>
-export { leaf }
 
+/**
+ * @since 0.1.0
+ */
+export type RBTree<A> = { readonly type: 'Leaf' } | Node<A>
+
+export {
+  /**
+   * @since 0.1.0
+   */
+  leaf,
+}
+
+/**
+ * @since 0.1.0
+ */
 export const node = <A>(
   color: Color,
   left: RBTree<A>,
@@ -36,6 +59,9 @@ export const node = <A>(
   right,
 })
 
+/**
+ * @since 0.1.0
+ */
 export const rbTree: Foldable1<URI> = {
   URI,
 
@@ -119,6 +145,9 @@ function rbalance<A>(
   return node(color, left, value, right)
 }
 
+/**
+ * @since 0.1.0
+ */
 export const getSet = <A>(ord: Ord<A>): PSet<URI, A> => {
   const S: PSet<URI, A> = {
     empty: leaf,

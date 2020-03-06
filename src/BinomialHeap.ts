@@ -1,10 +1,20 @@
+/**
+ * @since 0.1.0
+ */
 import { Option, option, some, none } from 'fp-ts/lib/Option'
 import { Ord } from 'fp-ts/lib/Ord'
 
 import { PHeap } from './PHeap'
 import * as L from './List'
 
+/**
+ * @since 0.1.0
+ */
 export const URI = 'BinomialHeap'
+
+/**
+ * @since 0.1.0
+ */
 export type URI = typeof URI
 
 declare module 'fp-ts/lib/HKT' {
@@ -13,20 +23,32 @@ declare module 'fp-ts/lib/HKT' {
   }
 }
 
+/**
+ * @since 0.1.0
+ */
 export type BinomialTree<A> = {
   rank: number
   value: A
   children: L.List<BinomialTree<A>>
 }
 
+/**
+ * @since 0.1.0
+ */
 export const node = <A>(
   rank: number,
   value: A,
   children: L.List<BinomialTree<A>>,
 ) => ({ rank, value, children })
 
+/**
+ * @since 0.1.0
+ */
 export type BinomialHeap<A> = L.List<BinomialTree<A>>
 
+/**
+ * @since 0.1.0
+ */
 export const link = <A>(ord: Ord<A>) => (
   a: BinomialTree<A>,
   b: BinomialTree<A>,
@@ -43,9 +65,15 @@ const insTree = <A>(ord: Ord<A>) => (
     ? L.insert(h, 0, tree)
     : insTree(ord)(link(ord)(tree, h.value), h.next)
 
+/**
+ * @since 0.1.0
+ */
 export const insert = <A>(ord: Ord<A>) => (a: A, heap: BinomialHeap<A>) =>
   insTree(ord)(node(0, a, L.nil), heap)
 
+/**
+ * @since 0.1.0
+ */
 export const merge = <A>(ord: Ord<A>) => (
   a: BinomialHeap<A>,
   b: BinomialHeap<A>,
@@ -84,6 +112,9 @@ const deleteMin = <A>(ord: Ord<A>) => (
     merge(ord)(L.reverse(tree.children), rest),
   )
 
+/**
+ * @since 0.1.0
+ */
 export const binomialHeap: PHeap<URI> = {
   empty: () => L.nil,
   isEmpty: () => (heap) => heap.type === 'Nil',

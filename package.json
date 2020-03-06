@@ -2,12 +2,15 @@
   "name": "lambdata",
   "version": "0.0.0",
   "description": "Purely functional data structures in Typescript",
+  "homepage": "https://github.com/skeate/lambdata",
   "scripts": {
     "clean": "rimraf dist types",
+    "docs": "cp README.md docs/index.md && docs-ts",
     "prebuild": "yarn clean",
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.es6.json",
     "test": "jest",
     "prepublishOnly": "yarn build",
+    "prerelease": "yarn docs",
     "release": "HUSKY_SKIP_HOOKS=1 standard-version --no-verify"
   },
   "keywords": [
@@ -30,6 +33,7 @@
     "@yarnpkg/pnpify": "^2.0.0-rc.18",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "3.1.0",
+    "docs-ts": "^0.3.4",
     "fast-check": "^1.22.2",
     "fp-ts-laws": "^0.2.1",
     "husky": "^4.2.3",
