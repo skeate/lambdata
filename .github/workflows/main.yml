@@ -14,7 +14,7 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '13.x'
-    - run: npm install -g yarn
+    - run: yarn -v
     - run: yarn
     - run: yarn tsc --noEmit
     - run: yarn test
