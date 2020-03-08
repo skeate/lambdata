@@ -15,5 +15,6 @@ jobs:
       with:
         node-version: '13.x'
     - run: npm install -g yarn
+    - run: yarn
     - run: yarn tsc --noEmit
     - run: yarn test
