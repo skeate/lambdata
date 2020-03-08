@@ -15,6 +15,7 @@ jobs:
       with:
         node-version: '13.x'
     - run: yarn -v
-    - run: yarn
-    - run: yarn tsc --noEmit
-    - run: yarn test
+    - run: |
+        yarn
+        yarn tsc --noEmit
+        yarn test
