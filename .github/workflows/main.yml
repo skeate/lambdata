@@ -11,7 +11,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: P3TERX/debugger-action@master
     - uses: actions/setup-node@v1
       with:
         node-version: '13.x'
