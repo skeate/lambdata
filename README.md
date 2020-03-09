@@ -1,3 +1,6 @@
+![CI](https://github.com/skeate/lambdata/workflows/CI/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/skeate/lambdata/badge.svg?branch=master)](https://coveralls.io/github/skeate/lambdata?branch=master)
+
 # lambdata
 
 lambdata is a library of [persistent][1], [purely functional data structures][2], written in [Typescript][3] using [fp-ts][4], based on the work of
