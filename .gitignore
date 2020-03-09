@@ -1,8 +1,8 @@
 node_modules
 .yarn/*
+!.yarn/cache
 !.yarn/releases
 !.yarn/plugins
-.pnp.*
 coverage
 report.*.json
 dist
