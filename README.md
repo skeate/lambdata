@@ -1,4 +1,5 @@
 ![CI](https://github.com/skeate/lambdata/workflows/CI/badge.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/33bb3fd02ad547e5b29c41b3316a084a)](https://app.codacy.com/manual/skeate/lambdata?utm_source=github.com&utm_medium=referral&utm_content=skeate/lambdata&utm_campaign=Badge_Grade_Settings)
 [![codecov](https://codecov.io/gh/skeate/lambdata/branch/master/graph/badge.svg)](https://codecov.io/gh/skeate/lambdata)
 
 # lambdata
