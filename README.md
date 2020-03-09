@@ -1,5 +1,5 @@
 ![CI](https://github.com/skeate/lambdata/workflows/CI/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/skeate/lambdata/badge.svg?branch=master)](https://coveralls.io/github/skeate/lambdata?branch=master)
+[![codecov](https://codecov.io/gh/skeate/lambdata/branch/master/graph/badge.svg)](https://codecov.io/gh/skeate/lambdata)
 
 # lambdata
 
