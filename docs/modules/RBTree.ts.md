@@ -4,7 +4,7 @@ nav_order: 8
 parent: Modules
 ---
 
-# RBTree overview
+## RBTree overview
 
 Added in v0.1.0
 
@@ -12,17 +12,20 @@ Added in v0.1.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [RBTree (type alias)](#rbtree-type-alias)
-- [URI (type alias)](#uri-type-alias)
-- [URI](#uri)
-- [getSet](#getset)
-- [leaf](#leaf)
-- [node](#node)
-- [rbTree](#rbtree)
+- [utils](#utils)
+  - [RBTree (type alias)](#rbtree-type-alias)
+  - [URI](#uri)
+  - [URI (type alias)](#uri-type-alias)
+  - [getSet](#getset)
+  - [leaf](#leaf)
+  - [node](#node)
+  - [rbTree](#rbtree)
 
 ---
 
-# RBTree (type alias)
+# utils
+
+## RBTree (type alias)
 
 **Signature**
 
@@ -32,7 +35,17 @@ export type RBTree<A> = { readonly type: 'Leaf' } | Node<A>
 
 Added in v0.1.0
 
-# URI (type alias)
+## URI
+
+**Signature**
+
+```ts
+export declare const URI: 'RBTree'
+```
+
+Added in v0.1.0
+
+## URI (type alias)
 
 **Signature**
 
@@ -42,57 +55,42 @@ export type URI = typeof URI
 
 Added in v0.1.0
 
-# URI
+## getSet
 
 **Signature**
 
 ```ts
-export const URI: "RBTree" = ...
+export declare const getSet: <A>(ord: Ord<A>) => PSet<'RBTree', A>
 ```
 
 Added in v0.1.0
 
-# getSet
+## leaf
 
 **Signature**
 
 ```ts
-export const getSet = <A>(ord: Ord<A>): PSet<URI, A> => ...
+export declare const leaf: { readonly type: 'Leaf' }
 ```
 
 Added in v0.1.0
 
-# leaf
+## node
 
 **Signature**
 
 ```ts
-{ readonly type: "Leaf"; }
+export declare const node: <A>(color: Color, left: RBTree<A>, value: A, right: RBTree<A>) => Node<A>
 ```
 
 Added in v0.1.0
 
-# node
+## rbTree
 
 **Signature**
 
 ```ts
-export const node = <A>(
-  color: Color,
-  left: RBTree<A>,
-  value: A,
-  right: RBTree<A>,
-): Node<A> => ...
-```
-
-Added in v0.1.0
-
-# rbTree
-
-**Signature**
-
-```ts
-export const rbTree: Foldable1<URI> = ...
+export declare const rbTree: Foldable1<'RBTree'>
 ```
 
 Added in v0.1.0

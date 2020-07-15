@@ -4,7 +4,7 @@ nav_order: 1
 parent: Modules
 ---
 
-# BinaryTree overview
+## BinaryTree overview
 
 Added in v0.1.0
 
@@ -12,19 +12,22 @@ Added in v0.1.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [BinaryTree (type alias)](#binarytree-type-alias)
-- [URI (type alias)](#uri-type-alias)
-- [URI](#uri)
-- [binaryTree](#binarytree)
-- [getEq](#geteq)
-- [getOrd](#getord)
-- [getSet](#getset)
-- [leaf](#leaf)
-- [node](#node)
+- [utils](#utils)
+  - [BinaryTree (type alias)](#binarytree-type-alias)
+  - [URI](#uri)
+  - [URI (type alias)](#uri-type-alias)
+  - [binaryTree](#binarytree)
+  - [getEq](#geteq)
+  - [getOrd](#getord)
+  - [getSet](#getset)
+  - [leaf](#leaf)
+  - [node](#node)
 
 ---
 
-# BinaryTree (type alias)
+# utils
+
+## BinaryTree (type alias)
 
 **Signature**
 
@@ -43,7 +46,17 @@ export type BinaryTree<A> =
 
 Added in v0.1.0
 
-# URI (type alias)
+## URI
+
+**Signature**
+
+```ts
+export declare const URI: 'BinaryTree'
+```
+
+Added in v0.1.0
+
+## URI (type alias)
 
 **Signature**
 
@@ -53,76 +66,62 @@ export type URI = typeof URI
 
 Added in v0.1.0
 
-# URI
+## binaryTree
 
 **Signature**
 
 ```ts
-export const URI: "BinaryTree" = ...
+export declare const binaryTree: Foldable1<'BinaryTree'>
 ```
 
 Added in v0.1.0
 
-# binaryTree
+## getEq
 
 **Signature**
 
 ```ts
-export const binaryTree: Foldable1<URI> = ...
+export declare const getEq: <A>(eqa: Eq<A>) => Eq<BinaryTree<A>>
 ```
 
 Added in v0.1.0
 
-# getEq
+## getOrd
 
 **Signature**
 
 ```ts
-export const getEq = <A>(eqa: Eq<A>): Eq<BinaryTree<A>> => ...
+export declare const getOrd: <A>(ord: Ord<A>) => Ord<BinaryTree<A>>
 ```
 
 Added in v0.1.0
 
-# getOrd
+## getSet
 
 **Signature**
 
 ```ts
-export const getOrd = <A>(ord: Ord<A>): Ord<BinaryTree<A>> => ...
+export declare const getSet: <A>(ord: Ord<A>) => PSet<'BinaryTree', A>
 ```
 
 Added in v0.1.0
 
-# getSet
+## leaf
 
 **Signature**
 
 ```ts
-export const getSet = <A>(ord: Ord<A>): PSet<URI, A> => ...
+export declare const leaf: { readonly type: 'Leaf' }
 ```
 
 Added in v0.1.0
 
-# leaf
+## node
 
 **Signature**
 
 ```ts
-export const leaf: { readonly type: "Leaf"; } = ...
-```
-
-Added in v0.1.0
-
-# node
-
-**Signature**
-
-```ts
-export const node = <A>(
-  left: BinaryTree<A>,
-  value: A,
-  right: BinaryTree<A>,
-): BinaryTree<A> => ...
+export declare const node: <A>(left: BinaryTree<A>, value: A, right: BinaryTree<A>) => BinaryTree<A>
 ```
 
 Added in v0.1.0

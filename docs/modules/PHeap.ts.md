@@ -4,7 +4,7 @@ nav_order: 6
 parent: Modules
 ---
 
-# PHeap overview
+## PHeap overview
 
 Added in v0.1.0
 
@@ -12,11 +12,14 @@ Added in v0.1.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [PHeap (interface)](#pheap-interface)
+- [utils](#utils)
+  - [PHeap (interface)](#pheap-interface)
 
 ---
 
-# PHeap (interface)
+# utils
+
+## PHeap (interface)
 
 Typeclass for persistent heaps.
 

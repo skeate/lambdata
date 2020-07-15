@@ -4,7 +4,7 @@ nav_order: 2
 parent: Modules
 ---
 
-# BinomialHeap overview
+## BinomialHeap overview
 
 Added in v0.1.0
 
@@ -12,19 +12,22 @@ Added in v0.1.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [BinomialHeap (type alias)](#binomialheap-type-alias)
-- [BinomialTree (type alias)](#binomialtree-type-alias)
-- [URI (type alias)](#uri-type-alias)
-- [URI](#uri)
-- [binomialHeap](#binomialheap)
-- [insert](#insert)
-- [link](#link)
-- [merge](#merge)
-- [node](#node)
+- [utils](#utils)
+  - [BinomialHeap (type alias)](#binomialheap-type-alias)
+  - [BinomialTree (type alias)](#binomialtree-type-alias)
+  - [URI](#uri)
+  - [URI (type alias)](#uri-type-alias)
+  - [binomialHeap](#binomialheap)
+  - [insert](#insert)
+  - [link](#link)
+  - [merge](#merge)
+  - [node](#node)
 
 ---
 
-# BinomialHeap (type alias)
+# utils
+
+## BinomialHeap (type alias)
 
 **Signature**
 
@@ -34,7 +37,7 @@ export type BinomialHeap<A> = L.List<BinomialTree<A>>
 
 Added in v0.1.0
 
-# BinomialTree (type alias)
+## BinomialTree (type alias)
 
 **Signature**
 
@@ -48,7 +51,17 @@ export type BinomialTree<A> = {
 
 Added in v0.1.0
 
-# URI (type alias)
+## URI
+
+**Signature**
+
+```ts
+export declare const URI: 'BinomialHeap'
+```
+
+Added in v0.1.0
+
+## URI (type alias)
 
 **Signature**
 
@@ -58,72 +71,60 @@ export type URI = typeof URI
 
 Added in v0.1.0
 
-# URI
+## binomialHeap
 
 **Signature**
 
 ```ts
-export const URI: "BinomialHeap" = ...
+export declare const binomialHeap: PHeap<'BinomialHeap'>
 ```
 
 Added in v0.1.0
 
-# binomialHeap
+## insert
 
 **Signature**
 
 ```ts
-export const binomialHeap: PHeap<URI> = ...
+export declare const insert: <A>(ord: Ord<A>) => (a: A, heap: L.List<BinomialTree<A>>) => L.List<BinomialTree<A>>
 ```
 
 Added in v0.1.0
 
-# insert
+## link
 
 **Signature**
 
 ```ts
-export const insert = <A>(ord: Ord<A>) => (a: A, heap: BinomialHeap<A>) => ...
+export declare const link: <A>(
+  ord: Ord<A>
+) => (a: BinomialTree<A>, b: BinomialTree<A>) => { rank: number; value: A; children: L.List<BinomialTree<A>> }
 ```
 
 Added in v0.1.0
 
-# link
+## merge
 
 **Signature**
 
 ```ts
-export const link = <A>(ord: Ord<A>) => (
-  a: BinomialTree<A>,
-  b: BinomialTree<A>,
-) => ...
+export declare const merge: <A>(
+  ord: Ord<A>
+) => (a: L.List<BinomialTree<A>>, b: L.List<BinomialTree<A>>) => L.List<BinomialTree<A>>
 ```
 
 Added in v0.1.0
 
-# merge
+## node
 
 **Signature**
 
 ```ts
-export const merge = <A>(ord: Ord<A>) => (
-  a: BinomialHeap<A>,
-  b: BinomialHeap<A>,
-): BinomialHeap<A> => ...
-```
-
-Added in v0.1.0
-
-# node
-
-**Signature**
-
-```ts
-export const node = <A>(
+export declare const node: <A>(
   rank: number,
   value: A,
-  children: L.List<BinomialTree<A>>,
-) => ...
+  children: L.List<BinomialTree<A>>
+) => { rank: number; value: A; children: L.List<BinomialTree<A>> }
 ```
 
 Added in v0.1.0

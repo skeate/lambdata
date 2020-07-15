@@ -4,7 +4,7 @@ nav_order: 5
 parent: Modules
 ---
 
-# List overview
+## List overview
 
 Added in v0.1.0
 
@@ -12,25 +12,28 @@ Added in v0.1.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [List (type alias)](#list-type-alias)
-- [URI (type alias)](#uri-type-alias)
-- [URI](#uri)
-- [arr2list](#arr2list)
-- [concat](#concat)
-- [cons](#cons)
-- [getEq](#geteq)
-- [getMonoid](#getmonoid)
-- [insert](#insert)
-- [iterate](#iterate)
-- [list](#list)
-- [list2arr](#list2arr)
-- [nil](#nil)
-- [reverse](#reverse)
-- [update](#update)
+- [utils](#utils)
+  - [List (type alias)](#list-type-alias)
+  - [URI](#uri)
+  - [URI (type alias)](#uri-type-alias)
+  - [arr2list](#arr2list)
+  - [concat](#concat)
+  - [cons](#cons)
+  - [getEq](#geteq)
+  - [getMonoid](#getmonoid)
+  - [insert](#insert)
+  - [iterate](#iterate)
+  - [list](#list)
+  - [list2arr](#list2arr)
+  - [nil](#nil)
+  - [reverse](#reverse)
+  - [update](#update)
 
 ---
 
-# List (type alias)
+# utils
+
+## List (type alias)
 
 **Signature**
 
@@ -50,7 +53,17 @@ export type List<A> =
 
 Added in v0.1.0
 
-# URI (type alias)
+## URI
+
+**Signature**
+
+```ts
+export declare const URI: 'List'
+```
+
+Added in v0.1.0
+
+## URI (type alias)
 
 **Signature**
 
@@ -60,138 +73,122 @@ export type URI = typeof URI
 
 Added in v0.1.0
 
-# URI
+## arr2list
 
 **Signature**
 
 ```ts
-export const URI: "List" = ...
+export declare const arr2list: <A>(arr: A[]) => List<A>
 ```
 
 Added in v0.1.0
 
-# arr2list
+## concat
 
 **Signature**
 
 ```ts
-export const arr2list = <A>(arr: Array<A>): List<A> =>
-  arr.reduceRight((p: List<A>, n) => ...
+export declare const concat: <A>(xs: List<A>, ys: List<A>) => List<A>
 ```
 
 Added in v0.1.0
 
-# concat
+## cons
 
 **Signature**
 
 ```ts
-export const concat = <A>(xs: List<A>, ys: List<A>): List<A> => ...
+export declare const cons: <A>(value: A, next?: List<A>) => List<A>
 ```
 
 Added in v0.1.0
 
-# cons
+## getEq
 
 **Signature**
 
 ```ts
-export const cons = <A>(value: A, next: List<A> = nil): List<A> => ...
+export declare const getEq: <A>(eqa: Eq<A>) => Eq<List<A>>
 ```
 
 Added in v0.1.0
 
-# getEq
+## getMonoid
 
 **Signature**
 
 ```ts
-export const getEq = <A>(eqa: Eq<A>): Eq<List<A>> => ...
+export declare const getMonoid: <A>() => Monoid<List<A>>
 ```
 
 Added in v0.1.0
 
-# getMonoid
+## insert
 
 **Signature**
 
 ```ts
-export const getMonoid = <A>(): Monoid<List<A>> => ...
+export declare const insert: <A>(xs: List<A>, i: number, y: A) => List<A>
 ```
 
 Added in v0.1.0
 
-# insert
+## iterate
 
 **Signature**
 
 ```ts
-export const insert = <A>(xs: List<A>, i: number, y: A): List<A> => ...
+export declare const iterate: <A>(l: List<A>) => Generator<A, void, unknown>
 ```
 
 Added in v0.1.0
 
-# iterate
+## list
 
 **Signature**
 
 ```ts
-export const iterate: <A>(l: List<A>) => Generator<A, void, unknown> = ...
+export declare const list: Functor1<'List'> & Monad1<'List'>
 ```
 
 Added in v0.1.0
 
-# list
+## list2arr
 
 **Signature**
 
 ```ts
-export const list: Functor1<URI> & Monad1<URI> = ...
+export declare const list2arr: <A>(l: List<A>) => A[]
 ```
 
 Added in v0.1.0
 
-# list2arr
+## nil
 
 **Signature**
 
 ```ts
-export const list2arr = <A>(l: List<A>): Array<A> => ...
+export declare const nil: { readonly type: 'Nil'; readonly length: 0 }
 ```
 
 Added in v0.1.0
 
-# nil
+## reverse
 
 **Signature**
 
 ```ts
-export const nil: { readonly type: "Nil"; readonly length: 0; } = ...
+export declare const reverse: <A>(xs: List<A>, reversed?: List<A>) => List<A>
 ```
 
 Added in v0.1.0
 
-# reverse
+## update
 
 **Signature**
 
 ```ts
-export const reverse = <A>(xs: List<A>, reversed: List<A> = nil): List<A> => ...
-```
-
-Added in v0.1.0
-
-# update
-
-**Signature**
-
-```ts
-export const update = <A>(xs: List<A>, i: number, y: A): Option<List<A>> =>
-  xs.type === 'Nil' || i < 0
-    ? none
-    : i === 0
-    ? some(cons(y, xs.next))
-    : option.map(update(xs.next, i - 1, y), (n) => ...
+export declare const update: <A>(xs: List<A>, i: number, y: A) => Option<List<A>>
 ```
 
 Added in v0.1.0

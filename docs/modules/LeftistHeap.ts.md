@@ -4,7 +4,7 @@ nav_order: 4
 parent: Modules
 ---
 
-# LeftistHeap overview
+## LeftistHeap overview
 
 Added in v0.1.0
 
@@ -12,18 +12,21 @@ Added in v0.1.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [LeftistHeap (type alias)](#leftistheap-type-alias)
-- [URI (type alias)](#uri-type-alias)
-- [URI](#uri)
-- [leaf](#leaf)
-- [leftistHeap](#leftistheap)
-- [makeT](#maket)
-- [node](#node)
-- [rank](#rank)
+- [utils](#utils)
+  - [LeftistHeap (type alias)](#leftistheap-type-alias)
+  - [URI](#uri)
+  - [URI (type alias)](#uri-type-alias)
+  - [leaf](#leaf)
+  - [leftistHeap](#leftistheap)
+  - [makeT](#maket)
+  - [node](#node)
+  - [rank](#rank)
 
 ---
 
-# LeftistHeap (type alias)
+# utils
+
+## LeftistHeap (type alias)
 
 **Signature**
 
@@ -41,7 +44,17 @@ export type LeftistHeap<A> =
 
 Added in v0.1.0
 
-# URI (type alias)
+## URI
+
+**Signature**
+
+```ts
+export declare const URI: 'LeftistHeap'
+```
+
+Added in v0.1.0
+
+## URI (type alias)
 
 **Signature**
 
@@ -51,76 +64,62 @@ export type URI = typeof URI
 
 Added in v0.1.0
 
-# URI
+## leaf
 
 **Signature**
 
 ```ts
-export const URI: "LeftistHeap" = ...
+export declare const leaf: { readonly type: 'Leaf' }
 ```
 
 Added in v0.1.0
 
-# leaf
+## leftistHeap
 
 **Signature**
 
 ```ts
-{ readonly type: "Leaf"; }
+export declare const leftistHeap: PHeap<'LeftistHeap'>
 ```
 
 Added in v0.1.0
 
-# leftistHeap
+## makeT
 
 **Signature**
 
 ```ts
-export const leftistHeap: PHeap<URI> = ...
+export declare const makeT: <A>(value: A, a: LeftistHeap<A>, b: LeftistHeap<A>) => LeftistHeap<A>
 ```
 
 Added in v0.1.0
 
-# makeT
+## node
 
 **Signature**
 
 ```ts
-export const makeT = <A>(
-  value: A,
-  a: LeftistHeap<A>,
-  b: LeftistHeap<A>,
-): LeftistHeap<A> => ...
-```
-
-Added in v0.1.0
-
-# node
-
-**Signature**
-
-```ts
-export const node = <A>({
-  rank = 1,
-  left = leaf,
+export declare const node: <A>({
+  rank,
+  left,
   value,
-  right = leaf,
+  right,
 }: {
   rank?: number
   left?: LeftistHeap<A>
   value: A
   right?: LeftistHeap<A>
-}): LeftistHeap<A> => ...
+}) => LeftistHeap<A>
 ```
 
 Added in v0.1.0
 
-# rank
+## rank
 
 **Signature**
 
 ```ts
-export const rank = <A>(h: LeftistHeap<A>): number => ...
+export declare const rank: <A>(h: LeftistHeap<A>) => number
 ```
 
 Added in v0.1.0
